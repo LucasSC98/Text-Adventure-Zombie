@@ -1,0 +1,104 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: black;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#game {
+    width: 900px;
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #fff;
+    border-radius: 20px;
+    background-color: #444;
+    position: relative;
+
+}
+
+#output {
+    margin-bottom: 10px;
+    padding: 8px;
+    height: 20%;
+    border: 1px solid #fff;
+    background-color: #222;
+    overflow: auto;
+
+}
+
+input {
+    width: 35%;
+    padding: 10px;
+    margin: 15px auto 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 180px;
+    left: 560px;
+    border: 2px solid #fff;
+    border-radius: 15px;
+    background-color: #555;
+    color: #fff;
+    outline: none;
+
+
+
+}
+#botao{
+    width: 5%;
+    padding: 10px;
+    margin: 15px auto 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    bottom: 180px;
+    left: 1300px;
+    background-color: #007bff;
+    color: white;
+    border: 2px solid #007bff;
+    border-radius: 15px;
+    cursor: pointer;
+    float: right;
+    outline: none;
+}
+#inventory {
+    position: fixed;
+    top: 138px;
+    right: 35px;
+    width: 200px;
+    height: 50%;
+    background-color: #444;
+    border-left: 1px solid black;
+    padding: 10px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    border-radius: 20px;
+}
+#inventoryHeader {
+    color: blue;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+#gameMessage {
+    margin-right: 220px;
+    padding: 10px;
+    color: black;
+}
+#inventoryItems{
+    color: black;
+}
+.footer {
+    padding: 10px;
+    border-top: 1px solid #fff;
+    background-color: #333;
+    display: flex;
+    align-items: center;
+}
