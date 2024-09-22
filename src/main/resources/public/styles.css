@@ -23,8 +23,9 @@ body {
 
 #output {
     margin-bottom: 10px;
+    width: 900px;
+    height: 600px;
     padding: 8px;
-    height: 20%;
     border: 1px solid #fff;
     background-color: #222;
     overflow: auto;
@@ -39,8 +40,8 @@ input {
     justify-content: center;
     align-items: center;
     position: fixed;
-    bottom: 180px;
-    left: 560px;
+    bottom: 150px;
+    left: 400px;
     border: 2px solid #fff;
     border-radius: 15px;
     background-color: #555;
@@ -59,8 +60,8 @@ input {
     justify-content: space-between;
     align-items: center;
     position: fixed;
-    bottom: 180px;
-    left: 1300px;
+    bottom: 150px;
+    left: 1000px;
     background-color: #007bff;
     color: white;
     border: 2px solid #007bff;
@@ -101,4 +102,22 @@ input {
     background-color: #333;
     display: flex;
     align-items: center;
+}
+#help {
+    position: fixed;
+    top: 138px;
+    left: 35px;
+    width: 200px;
+    height: 50%;
+    background-color: #444;
+    border-left: 1px solid black;
+    padding: 10px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    border-radius: 20px;
+}
+#textohelp{
+    top: 100px;
+    left: 35px;
+    color: #007bff;
 }

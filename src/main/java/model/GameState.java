@@ -11,15 +11,24 @@ public class GameState {
     private Inventario inventario;
     private Long cenaId;
     private Localizacao localizacao;
+    private String help;
 
-    Cena start = CenaRepo.findCenaById(0);
 
-    public GameState() throws SQLException {
+    public GameState() {
         this.location = "start";
-        this.message = start.getDescricao();
+        this.message = "";
         this.inventario = new Inventario();
         this.cenaId = null;
         this.localizacao = null;
+        this.help = "";
+    }
+
+    public String getHelp() {
+        return help;
+    }
+
+    public void setHelp(String help) {
+        this.help = help;
     }
 
     public String getLocation() {
@@ -62,18 +71,13 @@ public class GameState {
         Cena cena = CenaRepo.findCenaById(cenaId);
         if (cena != null) {
             gameState.setMessage(cena.getDescricao());
+            gameState.setHelp(cena.getHelp_cena());
         } else {
             gameState.setMessage("Cena não encontrada.");
+            gameState.setHelp("");
         }
     }
-    public void localizarCena(int cenaId, GameState gameState) throws SQLException {
-        Cena cena = CenaRepo.findCenaById(cenaId);
-        if (cena != null) {
-            gameState.setLocation(cena.getNome_cena());
-        }else {
-            gameState.setMessage("Não conheço essa localização");
-        }
-    }
+
     public void descricaoNeg(int Id, GameState gameState) throws SQLException {
         Movimentos movimento = AcoesDAO.findAcaoById(Id);
         if (movimento != null) {

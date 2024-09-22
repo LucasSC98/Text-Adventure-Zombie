@@ -2,14 +2,16 @@ CREATE TABLE cenas (
     id_cena int not null primary key,
     nome varchar(50) not null,
     id_local INT,
-    descricao_historia TEXT
+    descricao_historia TEXT,
+    help varchar (!00)
 );
 
 
 CREATE TABLE itens (
     id_item int not null PRIMARY KEY,
     nome varchar(100) NOT NULL,
-    descricao varchar (150)
+    descricao varchar (150),
+    quantidade int not null
 );
 
 CREATE TABLE cena_itens (

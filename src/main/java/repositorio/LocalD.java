@@ -15,7 +15,7 @@ public class LocalD {
         ResultSet rs = null;
 
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/textadventure", "root", "1234");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/textadventure", "root", "");
             ps = conn.prepareStatement("SELECT * FROM locais WHERE id_local = ?");
             ps.setInt(1, id);
             rs = ps.executeQuery();

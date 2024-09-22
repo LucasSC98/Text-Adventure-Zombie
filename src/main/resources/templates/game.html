@@ -8,24 +8,31 @@
 </head>
 <body>
 <div id="game">
-    <div id="output" th:text="${gameState.message}"></div>
+    <div id="chat-box">
+        <!-- Aqui vamos adicionar as mensagens do jogo e comandos -->
+        <div id="output"></div>
+    </div>
+    <div id="help">
+        <div id = "local"></div>
+        <div id= "textohelp" >Help</div>
+        <div id="helpTexto"></div>
+    </div>
     <div id="inventory">
         <div id="inventoryHeader">Itens no seu inventário:</div>
         <div id="inventoryItems">
-            <ul>
-                <li th:each="item : ${items}">
-                    <span th:text="${item.quantidade}"></span>
-                    <span th:text="${item.nome}">Nome do Item</span>                </li>
+            <ul id="inventario-lista">
             </ul>
         </div>
     </div>
 </div>
 
 <footer>
-    <form method="post" action="/game">
-        <input type="text" name="input" placeholder="O que você quer fazer?">
+    <form id="game-form" method="post">
+        <input type="text" name="input" id="command-input" placeholder="O que você quer fazer?">
         <button type="submit" id="botao">Enviar</button>
     </form>
 </footer>
+
+<script src="/app.js"></script>
 </body>
 </html>

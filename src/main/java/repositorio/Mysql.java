@@ -11,7 +11,7 @@ public class Mysql {
     public static Connection getConnection() {
         String url = "jdbc:mysql://localhost:3306/textadventure";
         String user = "root";
-        String senha = "1234";
+        String senha = "";
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");

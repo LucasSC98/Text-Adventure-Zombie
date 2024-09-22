@@ -8,12 +8,22 @@ public class Cena {
     private String descricao_cena;
     private String id_local;
     private String nome_cena;
+    private String help_cena;
 
-    public Cena(int id_cena, String descricao_cena, String id_local, String nome_cena) {
+    public Cena(int id_cena, String descricao_cena, String id_local, String nome_cena, String help_cena) {
         this.id_cena = id_cena;
         this.descricao_cena = descricao_cena;
         this.id_local = id_local;
         this.nome_cena = nome_cena;
+        this.help_cena = help_cena;
+    }
+
+    public String getHelp_cena() {
+        return help_cena;
+    }
+
+    public void setHelp_cena(String help_cena) {
+        this.help_cena = help_cena;
     }
 
     public Integer getIdCena() {
