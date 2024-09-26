@@ -25,17 +25,16 @@ CREATE TABLE cena_itens (
 
 
 
-CREATE TABLE acoes_transicoes (
-    id INT not null primary key,
-    cena_atual int, 
-    cena_destino int,  
-    descricao text NOT NULL,  
-    tipo varchar(20) NOT NULL,  
-    condicao text,  
-    resultadopositivo varchar(100),
-    resultadonegativo varchar(100),
-    FOREIGN KEY (cena_atual) REFERENCES cenas(id_cena),
-    FOREIGN KEY (cena_destino) REFERENCES cenas(id_cena)
+CREATE TABLE acoes (
+    id_acao INT primary key not null,
+    item1_id INT,
+    item2_id INT,
+    descricaoComb text,
+    nome_acao VARCHAR(50),
+    descricao_negativa TEXT,
+    descricao TEXT,
+    FOREIGN KEY (item1_id) REFERENCES itens(id_item),
+    FOREIGN KEY (item2_id) REFERENCES itens(id_item)
 );
 
 
