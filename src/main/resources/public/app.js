@@ -8,8 +8,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const ajuda = document.getElementById('help')
 
 
-    // addMessageToOutput("O mundo enfrenta uma invasão de mortos-vivos, que começou há duas semanas e tem piorado. Após um ataque quase fatal, eu me abriguei em uma casa abandonada para descansar. No entanto, uma horda de zumbis se aproxima e preciso proteger o local antes do pôr do sol para tentar sobreviver mais um dia. Digite \"start\" para começar o jogo.");
-    addMessageToOutput("Start - Começar jogo <br> Load - Carregar Save <br>");
+    addMessageToOutput("O mundo enfrenta uma invasão de mortos-vivos, que começou há duas semanas e tem piorado. Após um ataque quase fatal, " +
+        "eu me abriguei em uma casa abandonada para descansar. No entanto, " +
+        "uma horda de zumbis se aproxima e preciso proteger o local antes do pôr do sol para tentar sobreviver mais um dia. " +
+        "<br>Start - Começar jogo <br> Load - Carregar Save <br>");
 
     form.addEventListener('submit', function (e) {
         e.preventDefault();
