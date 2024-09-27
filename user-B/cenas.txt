@@ -1,7 +1,0 @@
-(1, 'Start', 'O mundo enfrenta uma invasão de mortos-vivos, que começou há duas semanas e tem piorado. Após um ataque quase fatal, eu me abriguei em uma casa abandonada para descansar.
-                    No entanto, uma horda de zumbis se aproxima e preciso proteger o local antes do pôr do sol para tentar sobreviver mais um dia.
-                    Digite ''start'' para começar o jogo', 1),
-(2, 'Começo', 'A casa tem 1 comodo com porão a esquerda, a direita tem a porta do jardim da frente, e também tenho a porta da saida atrás, Deveria ir para
-               o comodo, ir para o jardim ou ir para a porta do fundo?', 1),
-
-(3, 'Comodo', 'Você vai para o comodo no fim da casa. Existe um porão, deveria vasculhá-lo. Notei que tem uma pá encostada atrâs da porta, talvez possa ser útil. Devo pegar?', 1);
