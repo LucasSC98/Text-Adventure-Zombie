@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Adventure Game</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div id="game">
+    <div id="output" th:text="${gameState.message}"></div>
+    <div id="inventory">
+        <div id="inventoryHeader">Itens no seu inventário:</div>
+        <div id="inventoryItems">
+            <ul>
+                <li th:each="item : ${items}">
+                    <span th:text="${item.quantidade}"></span>
+                    <span th:text="${item.nome}">Nome do Item</span>                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <form method="post" action="/game">
+        <input type="text" name="input" placeholder="O que você quer fazer?">
+        <button type="submit" id="botao">Enviar</button>
+    </form>
+</footer>
+</body>
+</html>

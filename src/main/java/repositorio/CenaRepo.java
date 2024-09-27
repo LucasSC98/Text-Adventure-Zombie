@@ -12,17 +12,18 @@ public class CenaRepo {
         ResultSet rs = null;
 
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/textadventure", "root", "1234");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/textadventure", "root", "");
             stmt = conn.prepareStatement("SELECT * FROM cenas WHERE id_cena = ?");
             stmt.setInt(1, id);
             rs = stmt.executeQuery();
 
             if (rs.next()) {
                 Integer id_cena = rs.getInt("id_cena");
-                String descricao = rs.getString("descricao");
+                String descricao = rs.getString("descricao_historia");
                 String local = rs.getString("id_local");
                 String nome = rs.getString("nome");
-                return new Cena(id_cena, descricao, local, nome);
+                String help = rs.getString("help");
+                return new Cena(id_cena, descricao, local, nome, help);
             } else {
                 throw new SQLException("Cena com ID " + id + " não encontrada.");
             }

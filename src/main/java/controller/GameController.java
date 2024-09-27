@@ -1,15 +1,13 @@
 package controller;
 
 import static spark.Spark.*;
-
 import config.ConfiguracaoHtml;
-import model.Cena;
 import model.GameState;
 import model.Item;
-import repositorio.CenaRepo;
 import repositorio.ItemREPO;
 import spark.ModelAndView;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
+import com.google.gson.Gson;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -18,15 +16,15 @@ import java.util.Map;
 
 public class GameController {
     private GameState gameState = new GameState();
+    private Gson gson = new Gson();
 
     public GameController() throws SQLException {
+
     }
 
     public static void main(String[] args) throws SQLException {
         staticFiles.location("/public");
-
         ThymeleafTemplateEngine thymeleaf = ConfiguracaoHtml.create();
-
         GameController controller = new GameController();
         controller.setupRoutes();
     }
@@ -35,23 +33,28 @@ public class GameController {
         get("/game", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
             model.put("gameState", gameState);
-            model.put("Inventario", mostrarInventario());
+            model.put("inventario", mostrarInventario());
+            model.put("helpTexto", gameState.getHelp());
+            model.put("local", gameState.getLocation());
             return new ModelAndView(model, "game");
         }, new ThymeleafTemplateEngine());
 
         post("/game", (req, res) -> {
+            res.type("application/json");
             String input = req.queryParams("input").toLowerCase();
             try {
                 processCommand(input);
             } catch (SQLException e) {
                 e.printStackTrace();
-                gameState.setMessage("Comando invalido");
+                gameState.setMessage("Comando inválido");
             }
             Map<String, Object> model = new HashMap<>();
-            model.put("gameState", gameState);
+            model.put("message", gameState.getMessage());
             model.put("inventario", mostrarInventario());
-            model.put("items", mostrarInventario());
-            return new ThymeleafTemplateEngine().render(new ModelAndView(model, "game"));
+            model.put("helpTexto", gameState.getHelp());
+            model.put("local", gameState.getLocation());
+
+            return gson.toJson(model);
         });
     }
 
@@ -75,11 +78,11 @@ public class GameController {
             default:
                 gameState.setMessage("Comando não reconhecido.");
         }
+
     }
 
     private List<Item> mostrarInventario() {
         List<Item> itens = gameState.getInventario().listarItens();
-        System.out.println("Itens no inventário: " + itens);
         return itens;
     }
 
@@ -105,6 +108,8 @@ public class GameController {
         } else if (input.equalsIgnoreCase("go to exit")) {
             gameState.setLocation("casaFundo");
             gameState.carregarCena(4, gameState);
+        } else {
+            gameState.setMessage("Comando não reconhecido neste local.");
         }
     }
 
@@ -166,7 +171,5 @@ public class GameController {
             gameState.carregarCena(1, gameState);
             gameState.setLocation("casa");
         }
-
     }
-
 }

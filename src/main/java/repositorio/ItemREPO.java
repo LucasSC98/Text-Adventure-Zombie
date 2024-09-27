@@ -11,7 +11,7 @@ public class ItemREPO {
         ResultSet rs = null;
 
         try {
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/textadventure", "root", "1234");
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/textadventure", "root", "");
             stmt = conn.prepareStatement("SELECT * FROM itens WHERE id_item = ?");
             stmt.setInt(1, id);
             rs = stmt.executeQuery();
