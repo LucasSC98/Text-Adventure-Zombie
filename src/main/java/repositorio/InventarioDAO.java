@@ -4,7 +4,7 @@ import model.Item;
 
 import java.sql.*;
 
-public class InventarioREPO {
+public class InventarioDAO {
     public static void adicionarItem(Item item, int idSave) throws SQLException {
         Connection conn = null;
         PreparedStatement stmt = null;

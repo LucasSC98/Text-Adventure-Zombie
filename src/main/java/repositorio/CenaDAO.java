@@ -1,11 +1,10 @@
 package repositorio;
 
 import model.Cena;
-import model.GameState;
 
 import java.sql.*;
 
-public class CenaRepo {
+public class CenaDAO {
     public static Cena findCenaById(int id) throws SQLException {
         Connection conn = null;
         PreparedStatement stmt = null;

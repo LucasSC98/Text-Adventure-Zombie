@@ -8,8 +8,8 @@ import model.GameState;
 import model.Item;
 import model.Save;
 import repositorio.AcoesDAO;
-import repositorio.InventarioREPO;
-import repositorio.ItemREPO;
+import repositorio.InventarioDAO;
+import repositorio.ItemDAO;
 import repositorio.SaveDAO;
 import spark.ModelAndView;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
@@ -110,7 +110,7 @@ public class GameController {
     private void handleStart(String input) {
         try {
             if (input.contains("start")) {
-                InventarioREPO.limparInventario(gameState.getIdSave());
+                InventarioDAO.limparInventario(gameState.getIdSave());
                 gameState.setLocation("casa");
                 gameState.carregarCena(1);
             } else if (input.equalsIgnoreCase("load")) {
@@ -128,7 +128,7 @@ public class GameController {
 
     private void handleRestart() {
         try {
-            InventarioREPO.limparInventario(gameState.getIdSave());
+            InventarioDAO.limparInventario(gameState.getIdSave());
             gameState = new GameState();
             gameState.setLocation("casa");
             gameState.carregarCena(1);
@@ -157,10 +157,10 @@ public class GameController {
         }
     }
     private void casaCena1_1(String input) throws SQLException {
-        Item lanterna = ItemREPO.findItemByID(3);
-        Item pilha = ItemREPO.findItemByID(2);
-        Item cartucho = ItemREPO.findItemByID(5);
-        Item lanternaComPilhas = ItemREPO.findItemByID(4);
+        Item lanterna = ItemDAO.findItemByID(3);
+        Item pilha = ItemDAO.findItemByID(2);
+        Item cartucho = ItemDAO.findItemByID(5);
+        Item lanternaComPilhas = ItemDAO.findItemByID(4);
         switch (input) {
             case "get lanterna":
                 if (gameState.getInventario().itemJaPegado(lanterna)) {
@@ -215,7 +215,7 @@ public class GameController {
     private void casaCenaJardim(String input) throws SQLException {
         switch (input) {
             case "check container":
-                Item chave = ItemREPO.findItemByID(1);
+                Item chave = ItemDAO.findItemByID(1);
                 gameState.getInventario().adicionarItem(chave, 1);
                 gameState.setMessage(chave.getDescricao());
                 break;
@@ -227,10 +227,10 @@ public class GameController {
     }
 
     private void quartoCena(String input) throws SQLException {
-        Item revolver = ItemREPO.findItemByID(6);
-        Item cartucho = ItemREPO.findItemByID(5);
-        Item revolverCarregado = ItemREPO.findItemByID(7);
-        Item chave = ItemREPO.findItemByID(1);
+        Item revolver = ItemDAO.findItemByID(6);
+        Item cartucho = ItemDAO.findItemByID(5);
+        Item revolverCarregado = ItemDAO.findItemByID(7);
+        Item chave = ItemDAO.findItemByID(1);
         boolean tenhoChave = gameState.getInventario().itemJaPegado(chave);
         switch (input) {
             case "use key":
