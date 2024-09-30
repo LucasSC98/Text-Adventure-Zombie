@@ -70,7 +70,7 @@ public class SaveDAO {
             if (rs.next()) {
                 save = new Save();
                 save.setIdSave(rs.getInt("id_save"));
-                save.setCenaAtual(CenaREPO.findCenaById(rs.getInt("id_cena_atual")));
+                save.setCenaAtual(CenaDAO.findCenaById(rs.getInt("id_cena_atual")));
             }
         } finally {
             // Fechando recursos

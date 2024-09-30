@@ -5,8 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const helpTexto = document.getElementById('helpTexto');
     const inventarioLista = document.getElementById('inventario-lista');
     const inventario = document.getElementById('inventory');
-    const ajuda = document.getElementById('help')
-
+    const ajuda = document.getElementById('help');
 
     addMessageToOutput("O mundo enfrenta uma invasão de mortos-vivos, que começou há duas semanas e tem piorado. Após um ataque quase fatal, " +
         "eu me abriguei em uma casa abandonada para descansar. No entanto, " +
@@ -21,21 +20,28 @@ document.addEventListener('DOMContentLoaded', function () {
         addMessageToOutput(`Jogador: ${userInput}`);
         if (userInput === 'inventory') {
             inventario.style.display = 'block';
+            input.value = '';
         } else if (userInput === 'close inventory') {
             inventario.style.display = 'none';
+            input.value = '';
         } else if (userInput === 'help') {
             ajuda.style.display = 'block';
+            input.value = '';
         } else if (userInput === 'close help') {
-            ajuda.style.display = 'none'
+            ajuda.style.display = 'none';
+            input.value = '';
         } else {
             fetch('/game', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: new URLSearchParams({input: userInput})
+                body: new URLSearchParams({ input: userInput })
             })
-                .then(response => response.json())
+                .then(response => {
+                    console.log("Resposta do servidor:", response);
+                    return response.json();
+                })
                 .then(data => {
                     addMessageToOutput(`Jogo: ${data.message}`);
                     mostrarHelp(data.helpTexto);
@@ -45,15 +51,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
                 .catch(error => {
                     console.error('Erro:', error);
-                    addMessageToOutput('Comando Invalido, tente outro');
+                    addMessageToOutput('Comando Inválido, tente outro');
+                    input.value = '';
                 });
         }
     });
 
     async function addMessageToOutput(message) {
+        console.log("Mensagem recebida:", message);
         const messageElement = document.createElement('div');
         output.appendChild(messageElement);
-        output.scrollTop = output.scrollHeight;
 
         const parts = message.split('<br>').map(part => part.trim());
 
@@ -61,12 +68,12 @@ document.addEventListener('DOMContentLoaded', function () {
             if (part) {
                 for (const char of part) {
                     messageElement.innerHTML += char;
-                    await new Promise(resolve => setTimeout(resolve, 3)); // 3 ms cada caractere
+                    await new Promise(resolve => setTimeout(resolve, 3)); // 3 ms entre cada caractere
                 }
-                messageElement.innerHTML += '<br>'; //Adiciona quebra de linha
+                messageElement.innerHTML += '<br>'; // Adiciona quebra de linha
             }
         }
-        output.scrollTop = output.scrollHeight; // Scroll para o final após escrever a msg
+        output.scrollTop = output.scrollHeight; // Rola para o final
     }
 
     function mostrarCenaLocal(meuLocal) {
@@ -76,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function mostrarHelp(helpText) {
         helpTexto.innerHTML = '';
-        const comandoSeparado = helpText.split(','); // Separar os comando, quando tiver vírgula
+        const comandoSeparado = helpText.split(','); // Separar os comandos quando tiver vírgula
         comandoSeparado.forEach(comando => {
             const comandoElement = document.createElement('div');
             comandoElement.textContent = comando.trim().toUpperCase();

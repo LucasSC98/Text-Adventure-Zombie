@@ -1,7 +1,7 @@
 package model;
 
-import repositorio.AcoesREPO;
-import repositorio.CenaREPO;
+import repositorio.AcoesDAO;
+import repositorio.CenaDAO;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -108,7 +108,7 @@ public class GameState {
 
     // Método para carregar a cena e ajuda no banco de dados
     public void carregarCena(int cenaId) throws SQLException {
-        Cena cena = CenaREPO.findCenaById(cenaId);
+        Cena cena = CenaDAO.findCenaById(cenaId);
         if (cena != null) {
             this.setMessage(cena.getDescricao());
             this.setHelp(cena.getHelp_cena());
@@ -120,7 +120,7 @@ public class GameState {
     }
 
     public void descricaoNeg(int Id) throws SQLException {
-        Acoes movimento = AcoesREPO.findAcaoById(Id);
+        Acoes movimento = AcoesDAO.findAcaoById(Id);
         if (movimento != null) {
             this.setMessage(movimento.getDescricao());
         } else {
