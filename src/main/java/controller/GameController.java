@@ -232,6 +232,9 @@ public class GameController {
         Item revolverCarregado = ItemDAO.findItemByID(7);
         Item chave = ItemDAO.findItemByID(1);
         boolean tenhoChave = gameState.getInventario().itemJaPegado(chave);
+        boolean tenhoCartucho = gameState.getInventario().itemJaPegado(cartucho);
+        boolean tenhoRevolver = gameState.getInventario().itemJaPegado(revolver);
+        boolean revolverCombala = gameState.getInventario().itemJaPegado(revolverCarregado);
         switch (input) {
             case "use key":
                 if (tenhoChave) {
@@ -246,8 +249,6 @@ public class GameController {
                 gameState.setMessage(revolver.getDescricao());
                 break;
             case "use cartucho with revolver":
-                boolean tenhoCartucho = gameState.getInventario().itemJaPegado(cartucho);
-                boolean tenhoRevolver = gameState.getInventario().itemJaPegado(revolver);
                 Acoes equiparArma = AcoesDAO.findAcaoById(2);
 
                 if (tenhoCartucho && tenhoRevolver) {
@@ -260,7 +261,11 @@ public class GameController {
                 }
                 break;
             case "check janela":
-                gameState.carregarCena(7);
+                if(revolverCombala){
+                    gameState.carregarCena(7);
+                }else{
+                    gameState.setMessage("Melhor carregar a arma antes");
+                }
                 break;
             case "correr":
                 gameState.carregarCena(8);
@@ -272,9 +277,16 @@ public class GameController {
     }
 
     private void fundoCasa(String input) throws SQLException {
+        Item revolverCarregado = ItemDAO.findItemByID(7);
+        boolean tenhoRevolver = gameState.getInventario().itemJaPegado(revolverCarregado);
         switch (input) {
             case "lutar":
-                gameState.carregarCena(11);
+                if (tenhoRevolver) {
+                    gameState.carregarCena(11);
+                    gameState.getInventario().removerItem(revolverCarregado, 1);
+                }else{
+                    gameState.setMessage("Eu não tenho arma para lutar");
+                }
                 break;
             case "fugir":
                 gameState.carregarCena(10);
