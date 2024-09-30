@@ -1,6 +1,6 @@
 package model;
 
-import repositorio.InventarioDAO;
+import repositorio.InventarioREPO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,13 +19,13 @@ public class Inventario {
         for (Item i : itens) {
             if (i.getId() == item.getId()) {
                 i.setQuantidade(i.getQuantidade() + quantidade);
-                InventarioDAO.adicionarItem(i, gameState.getIdSave());
+                InventarioREPO.adicionarItem(i, gameState.getIdSave());
                 return;
             }
         }
         item.setQuantidade(quantidade);
         itens.add(item);
-        InventarioDAO.adicionarItem(item, gameState.getIdSave()); // Passa o id e adiciona nele
+        InventarioREPO.adicionarItem(item, gameState.getIdSave()); // Passa o id e adiciona nele
     }
 
     public void removerItem(Item item, int quantidade) throws SQLException {
@@ -34,10 +34,10 @@ public class Inventario {
                 int novaQuantidade = i.getQuantidade() - quantidade;
                 if (novaQuantidade <= 0) {
                     this.itens.remove(i);
-                    InventarioDAO.removerItem(i, quantidade, gameState.getIdSave()); // Passa o id e remove do mesmo
+                    InventarioREPO.removerItem(i, quantidade, gameState.getIdSave()); // Passa o id e remove do mesmo
                 } else {
                     i.setQuantidade(novaQuantidade);
-                    InventarioDAO.adicionarItem(i, gameState.getIdSave()); // vai atualizar a quantidade
+                    InventarioREPO.adicionarItem(i, gameState.getIdSave()); // vai atualizar a quantidade
                 }
                 break;
             }

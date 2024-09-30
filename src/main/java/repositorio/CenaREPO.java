@@ -4,7 +4,7 @@ import model.Cena;
 
 import java.sql.*;
 
-public class CenaDAO {
+public class CenaREPO {
     public static Cena findCenaById(int id) throws SQLException {
         Connection conn = null;
         PreparedStatement stmt = null;

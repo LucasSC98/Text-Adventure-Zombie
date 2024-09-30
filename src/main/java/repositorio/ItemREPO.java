@@ -4,7 +4,7 @@ import model.Item;
 
 import java.sql.*;
 
-public class ItemDAO {
+public class ItemREPO {
     public static Item findItemByID(int id) throws SQLException {
         Connection conn = null;
         PreparedStatement stmt = null;

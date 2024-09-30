@@ -7,9 +7,9 @@ import model.Acoes;
 import model.GameState;
 import model.Item;
 import model.Save;
-import repositorio.AcoesDAO;
-import repositorio.InventarioDAO;
-import repositorio.ItemDAO;
+import repositorio.AcoesREPO;
+import repositorio.InventarioREPO;
+import repositorio.ItemREPO;
 import repositorio.SaveDAO;
 import spark.ModelAndView;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
@@ -110,7 +110,7 @@ public class GameController {
     private void handleStart(String input) {
         try {
             if (input.contains("start")) {
-                InventarioDAO.limparInventario(gameState.getIdSave());
+                InventarioREPO.limparInventario(gameState.getIdSave());
                 gameState.setLocation("casa");
                 gameState.carregarCena(1);
             } else if (input.equalsIgnoreCase("load")) {
@@ -128,7 +128,7 @@ public class GameController {
 
     private void handleRestart() {
         try {
-            InventarioDAO.limparInventario(gameState.getIdSave());
+            InventarioREPO.limparInventario(gameState.getIdSave());
             gameState = new GameState();
             gameState.setLocation("casa");
             gameState.carregarCena(1);
@@ -157,10 +157,10 @@ public class GameController {
         }
     }
     private void casaCena1_1(String input) throws SQLException {
-        Item lanterna = ItemDAO.findItemByID(3);
-        Item pilha = ItemDAO.findItemByID(2);
-        Item cartucho = ItemDAO.findItemByID(5);
-        Item lanternaComPilhas = ItemDAO.findItemByID(4);
+        Item lanterna = ItemREPO.findItemByID(3);
+        Item pilha = ItemREPO.findItemByID(2);
+        Item cartucho = ItemREPO.findItemByID(5);
+        Item lanternaComPilhas = ItemREPO.findItemByID(4);
         switch (input) {
             case "get lanterna":
                 if (gameState.getInventario().itemJaPegado(lanterna)) {
@@ -179,7 +179,7 @@ public class GameController {
                 }
                 break;
             case "use pilha with lanterna":
-                Acoes pilhaLanterna = AcoesDAO.findAcaoById(1);
+                Acoes pilhaLanterna = AcoesREPO.findAcaoById(1);
                 boolean tenhoPilha = gameState.getInventario().itemJaPegado(pilha);
                 boolean tenhoLanterna = gameState.getInventario().itemJaPegado(lanterna);
 
@@ -215,7 +215,7 @@ public class GameController {
     private void casaCenaJardim(String input) throws SQLException {
         switch (input) {
             case "check container":
-                Item chave = ItemDAO.findItemByID(1);
+                Item chave = ItemREPO.findItemByID(1);
                 gameState.getInventario().adicionarItem(chave, 1);
                 gameState.setMessage(chave.getDescricao());
                 break;
@@ -227,15 +227,16 @@ public class GameController {
     }
 
     private void quartoCena(String input) throws SQLException {
-        Item revolver = ItemDAO.findItemByID(6);
-        Item cartucho = ItemDAO.findItemByID(5);
-        Item revolverCarregado = ItemDAO.findItemByID(7);
-        Item chave = ItemDAO.findItemByID(1);
+        Item revolver = ItemREPO.findItemByID(6);
+        Item cartucho = ItemREPO.findItemByID(5);
+        Item revolverCarregado = ItemREPO.findItemByID(7);
+        Item chave = ItemREPO.findItemByID(1);
         boolean tenhoChave = gameState.getInventario().itemJaPegado(chave);
         switch (input) {
             case "use key":
                 if (tenhoChave) {
                     gameState.carregarCena(6);
+                    gameState.getInventario().removerItem(chave, 1);
                 } else {
                     gameState.setMessage("Preciso da chave");
                 }
@@ -247,7 +248,7 @@ public class GameController {
             case "use cartucho with revolver":
                 boolean tenhoCartucho = gameState.getInventario().itemJaPegado(cartucho);
                 boolean tenhoRevolver = gameState.getInventario().itemJaPegado(revolver);
-                Acoes equiparArma = AcoesDAO.findAcaoById(2);
+                Acoes equiparArma = AcoesREPO.findAcaoById(2);
 
                 if (tenhoCartucho && tenhoRevolver) {
                     gameState.setMessage(equiparArma.getDescricao());

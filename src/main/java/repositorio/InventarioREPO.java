@@ -4,7 +4,7 @@ import model.Item;
 
 import java.sql.*;
 
-public class InventarioDAO {
+public class InventarioREPO {
     public static void adicionarItem(Item item, int idSave) throws SQLException {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -65,6 +65,7 @@ public class InventarioDAO {
                 if (quantidadeAtual < quantidade) {
                     throw new IllegalArgumentException("Quantidade a remover maior que a quantidade disponível.");
                 }
+                //Diminui a quantidade, caso usar
                 stmt = conn.prepareStatement("UPDATE inventario SET quantidade = quantidade - ? WHERE item_id = ? AND id_save = ?");
                 stmt.setInt(1, quantidade);
                 stmt.setInt(2, item.getId());

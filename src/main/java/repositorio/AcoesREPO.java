@@ -4,7 +4,7 @@ import model.Acoes;
 
 import java.sql.*;
 
-public class AcoesDAO {
+public class AcoesREPO {
     public static Acoes findAcaoById(int id) throws SQLException {
         Connection conn = null;
         PreparedStatement stmt = null;
