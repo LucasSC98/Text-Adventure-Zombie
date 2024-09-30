@@ -5,8 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const helpTexto = document.getElementById('helpTexto');
     const inventarioLista = document.getElementById('inventario-lista');
     const inventario = document.getElementById('inventory');
-    const ajuda = document.getElementById('help')
-
+    const ajuda = document.getElementById('help');
 
     addMessageToOutput("O mundo enfrenta uma invasão de mortos-vivos, que começou há duas semanas e tem piorado. Após um ataque quase fatal, " +
         "eu me abriguei em uma casa abandonada para descansar. No entanto, " +
@@ -21,52 +20,57 @@ document.addEventListener('DOMContentLoaded', function () {
         addMessageToOutput(`Jogador: ${userInput}`);
         if (userInput === 'inventory') {
             inventario.style.display = 'block';
+            input.value = '';
         } else if (userInput === 'close inventory') {
             inventario.style.display = 'none';
+            input.value = '';
         } else if (userInput === 'help') {
             ajuda.style.display = 'block';
+            input.value = '';
         } else if (userInput === 'close help') {
-            ajuda.style.display = 'none'
+            ajuda.style.display = 'none';
+            input.value = '';
         } else {
             fetch('/game', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: new URLSearchParams({input: userInput})
+                body: new URLSearchParams({ input: userInput })
             })
                 .then(response => response.json())
                 .then(data => {
                     addMessageToOutput(`Jogo: ${data.message}`);
-                    mostrarHelp(data.helpTexto);
-                    atualizarInventario(data.inventario);
+                    mostrarHelp(data.helpTexto); //Mostra os comando de ajuda
+                    atualizarInventario(data.inventario); //Atualiza o inventario
                     mostrarCenaLocal(data.local); // Cena nome
                     input.value = ''; // Limpar campo
                 })
                 .catch(error => {
                     console.error('Erro:', error);
                     addMessageToOutput('Comando Invalido, tente outro');
+                    input.value = '';
                 });
         }
     });
 
     async function addMessageToOutput(message) {
         const messageElement = document.createElement('div');
-        output.appendChild(messageElement);
-        output.scrollTop = output.scrollHeight;
 
-        const parts = message.split('<br>').map(part => part.trim());
+        const parts = message.split('<br>').map(part => part.trim()); // Separa a mensagem em partes, dividindo em quebras de linha
 
         for (const part of parts) {
             if (part) {
                 for (const char of part) {
                     messageElement.innerHTML += char;
-                    await new Promise(resolve => setTimeout(resolve, 3)); // 3 ms cada caractere
+                    await new Promise(resolve => setTimeout(resolve, 3)); // 3 ms entre cada caractere
                 }
-                messageElement.innerHTML += '<br>'; //Adiciona quebra de linha
+                messageElement.innerHTML += '<br>';
             }
         }
-        output.scrollTop = output.scrollHeight; // Scroll para o final após escrever a msg
+
+        // Rola a barra para cima, para deixar campo de entrada visível e não sobreposto
+        output.scrollTop = output.scrollHeight - output.clientHeight + 20;
     }
 
     function mostrarCenaLocal(meuLocal) {
@@ -76,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function mostrarHelp(helpText) {
         helpTexto.innerHTML = '';
-        const comandoSeparado = helpText.split(','); // Separar os comando, quando tiver vírgula
+        const comandoSeparado = helpText.split(','); // Separar os comandos, quando tiver vírgula
         comandoSeparado.forEach(comando => {
             const comandoElement = document.createElement('div');
             comandoElement.textContent = comando.trim().toUpperCase();

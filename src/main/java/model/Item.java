@@ -6,14 +6,26 @@ public class Item {
     private Integer quantidade;
     private String descricao_item;
     private String resNegativo;
+    private String pego;
 
-    public Item(Integer id_item, String nome, String descricao_item, Integer quantidade, String resNegativo) {
+    public Item(Integer id_item, String nome, String descricao_item, Integer quantidade, String resNegativo, String pego) {
         this.id_item = id_item;
         this.nome = nome;
         this.descricao_item = descricao_item;
         this.quantidade = quantidade;
         this.resNegativo = resNegativo;
+        this.pego = pego;
 
+    }
+    public Item() {
+    }
+
+    public String getPego() {
+        return pego;
+    }
+
+    public void setPego(String pego) {
+        this.pego = pego;
     }
 
     public String getResNegativo() {

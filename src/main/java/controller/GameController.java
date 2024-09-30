@@ -1,10 +1,16 @@
 package controller;
 
 import static spark.Spark.*;
+
 import config.ConfiguracaoHtml;
+import model.Acoes;
 import model.GameState;
 import model.Item;
+import model.Save;
+import repositorio.AcoesDAO;
+import repositorio.InventarioREPO;
 import repositorio.ItemREPO;
+import repositorio.SaveDAO;
 import spark.ModelAndView;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 import com.google.gson.Gson;
@@ -18,11 +24,11 @@ public class GameController {
     private GameState gameState = new GameState();
     private Gson gson = new Gson();
 
-    public GameController() throws SQLException {
+    public GameController() {
 
     }
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         staticFiles.location("/public");
         ThymeleafTemplateEngine thymeleaf = ConfiguracaoHtml.create();
         GameController controller = new GameController();
@@ -42,12 +48,7 @@ public class GameController {
         post("/game", (req, res) -> {
             res.type("application/json");
             String input = req.queryParams("input").toLowerCase();
-            try {
-                processCommand(input);
-            } catch (SQLException e) {
-                e.printStackTrace();
-                gameState.setMessage("Comando inválido");
-            }
+            processCommand(input);
             Map<String, Object> model = new HashMap<>();
             model.put("message", gameState.getMessage());
             model.put("inventario", mostrarInventario());
@@ -58,15 +59,34 @@ public class GameController {
         });
     }
 
-    private void processCommand(String input) throws SQLException {
+    private void processCommand(String input) {
+        try {
+            if (input.equals("restart")) {
+                handleRestart();
+            } else if (input.equals("save")) {
+                SaveDAO.setGameState(gameState);
+                SaveDAO.salvarJogo();
+                gameState.setMessage("Jogo salvo com sucesso.");
+            } else {
+                if (gameState.getLocation().equals("start")) {
+                    handleStart(input);
+                } else {
+                    locationsProcess(input);
+                }
+            }
+        } catch (SQLException e) {
+            gameState.setMessage("Erro ao salvar o jogo: " + e.getMessage());
+        } catch (Exception e) {
+            gameState.setMessage("Erro ao processar o comando: " + e.getMessage());
+        }
+    }
+
+    private void locationsProcess(String input) throws SQLException {
         switch (gameState.getLocation()) {
-            case "start":
-                handleStart(input);
-                break;
             case "casa":
                 casaCena1(input);
                 break;
-            case "comodoCasa":
+            case "poraoCasa":
                 casaCena1_1(input);
                 break;
             case "casaSaida":
@@ -75,22 +95,30 @@ public class GameController {
             case "casaFundo":
                 fundoCasa(input);
                 break;
+            case "quarto":
+                quartoCena(input);
+                break;
             default:
-                gameState.setMessage("Comando não reconhecido.");
+                gameState.setMessage("Local não reconhecido.");
         }
-
     }
 
     private List<Item> mostrarInventario() {
-        List<Item> itens = gameState.getInventario().listarItens();
-        return itens;
+        return gameState.getInventario().listarItens();
     }
 
     private void handleStart(String input) {
         try {
             if (input.contains("start")) {
+                InventarioREPO.limparInventario(gameState.getIdSave());
                 gameState.setLocation("casa");
-                gameState.carregarCena(1, gameState);
+                gameState.carregarCena(1);
+            } else if (input.equalsIgnoreCase("load")) {
+                Save save = SaveDAO.carregarUltimoJogo();
+                gameState.setIdSave(save.getIdSave());
+                gameState.carregarCena(save.getCenaAtual().getIdCena());
+            } else {
+                handleStart(input);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -98,38 +126,88 @@ public class GameController {
         }
     }
 
-    private void casaCena1(String input) throws SQLException {
-        if (input.equalsIgnoreCase("go to comodo")) {
-            gameState.setLocation("comodoCasa");
-            gameState.carregarCena(2, gameState);
-        } else if (input.equalsIgnoreCase("go to jardim")) {
-            gameState.setLocation("casaSaida");
-            gameState.carregarCena(3, gameState);
-        } else if (input.equalsIgnoreCase("go to exit")) {
-            gameState.setLocation("casaFundo");
-            gameState.carregarCena(4, gameState);
-        } else {
-            gameState.setMessage("Comando não reconhecido neste local.");
+    private void handleRestart() {
+        try {
+            InventarioREPO.limparInventario(gameState.getIdSave());
+            gameState = new GameState();
+            gameState.setLocation("casa");
+            gameState.carregarCena(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            gameState.setMessage("Erro ao reiniciar o jogo.");
         }
     }
 
+
+    private void casaCena1(String input) throws SQLException {
+        boolean visitouPorao = gameState.isVisitouLocal();
+        if (input.equalsIgnoreCase("go to porao")) {
+            gameState.setLocation("poraoCasa");
+            gameState.carregarCena(2);
+            gameState.setVisitouLocal(true);
+        } else if (input.equalsIgnoreCase("go to jardim")) {
+            if (visitouPorao) {
+                gameState.setLocation("casaSaida");
+                gameState.carregarCena(4);
+            } else {
+                gameState.setMessage("Acho melhor você visitar o porão primeiro");
+            }
+        }else{
+            gameState.setMessage("Comando Invalido no local");
+        }
+    }
     private void casaCena1_1(String input) throws SQLException {
+        Item lanterna = ItemREPO.findItemByID(3);
+        Item pilha = ItemREPO.findItemByID(2);
+        Item cartucho = ItemREPO.findItemByID(5);
+        Item lanternaComPilhas = ItemREPO.findItemByID(4);
         switch (input) {
-            case "get pa":
-                Item pa = ItemREPO.findItemByID(3);
-                gameState.getInventario().adicionarItem(pa);
-                gameState.setMessage(pa.getDescricao());
+            case "get lanterna":
+                if (gameState.getInventario().itemJaPegado(lanterna)) {
+                    gameState.setMessage(lanterna.getPego());
+                } else {
+                    gameState.getInventario().adicionarItem(lanterna, 1);
+                    gameState.setMessage(lanterna.getDescricao());
+                }
                 break;
-            case "no":
-                Item negativepa = ItemREPO.findItemByID(3);
-                gameState.setMessage(negativepa.getResNegativo());
-                gameState.setLocation("casa");
+            case "get pilhas":
+                if (gameState.getInventario().itemJaPegado(pilha)) {
+                    gameState.setMessage(pilha.getPego());
+                } else {
+                    gameState.getInventario().adicionarItem(pilha, 1);
+                    gameState.setMessage(pilha.getDescricao());
+                }
+                break;
+            case "use pilha with lanterna":
+                Acoes pilhaLanterna = AcoesDAO.findAcaoById(1);
+                boolean tenhoPilha = gameState.getInventario().itemJaPegado(pilha);
+                boolean tenhoLanterna = gameState.getInventario().itemJaPegado(lanterna);
+
+                if (tenhoPilha && tenhoLanterna) {
+                    gameState.setMessage(pilhaLanterna.getDescricaoComb());
+                    gameState.getInventario().removerItem(lanterna, 1);
+                    gameState.getInventario().removerItem(pilha, 1);
+                    gameState.getInventario().adicionarItem(lanternaComPilhas, 1);
+                } else {
+                    gameState.setMessage(pilhaLanterna.getDescricao_negativa());
+                }
+                break;
+            case "explorar":
+                gameState.carregarCena(3);
+                break;
+            case "get cartucho":
+                if (gameState.getInventario().itemJaPegado(cartucho)) {
+                    gameState.setMessage(cartucho.getPego());
+                } else {
+                    gameState.getInventario().adicionarItem(cartucho, 1);
+                    gameState.setMessage(cartucho.getDescricao());
+                }
                 break;
             default:
                 gameState.setMessage("Comando errado");
         }
         if (input.equalsIgnoreCase("voltar")) {
-            gameState.carregarCena(1, gameState);
+            gameState.carregarCena(1);
             gameState.setLocation("casa");
         }
     }
@@ -137,39 +215,71 @@ public class GameController {
     private void casaCenaJardim(String input) throws SQLException {
         switch (input) {
             case "check container":
-                Item fios = ItemREPO.findItemByID(4);
                 Item chave = ItemREPO.findItemByID(1);
-                gameState.getInventario().adicionarItem(fios);
-                gameState.getInventario().adicionarItem(chave);
+                gameState.getInventario().adicionarItem(chave, 1);
                 gameState.setMessage(chave.getDescricao());
                 break;
-            case "no":
-                Item negativecontainer = ItemREPO.findItemByID(1);
-                gameState.setMessage(negativecontainer.getResNegativo());
-                break;
-            default:
-                gameState.setMessage("Comando errado");
         }
         if (input.equalsIgnoreCase("voltar")) {
-            gameState.carregarCena(1, gameState);
-            gameState.setLocation("casa");
+            gameState.carregarCena(5);
+            gameState.setLocation("quarto");
+        }
+    }
+
+    private void quartoCena(String input) throws SQLException {
+        Item revolver = ItemREPO.findItemByID(6);
+        Item cartucho = ItemREPO.findItemByID(5);
+        Item revolverCarregado = ItemREPO.findItemByID(7);
+        Item chave = ItemREPO.findItemByID(1);
+        boolean tenhoChave = gameState.getInventario().itemJaPegado(chave);
+        switch (input) {
+            case "use key":
+                if (tenhoChave) {
+                    gameState.carregarCena(6);
+                } else {
+                    gameState.setMessage("Preciso da chave");
+                }
+                break;
+            case "get revolver":
+                gameState.getInventario().adicionarItem(revolver, 1);
+                gameState.setMessage(revolver.getDescricao());
+                break;
+            case "use cartucho with revolver":
+                boolean tenhoCartucho = gameState.getInventario().itemJaPegado(cartucho);
+                boolean tenhoRevolver = gameState.getInventario().itemJaPegado(revolver);
+                Acoes equiparArma = AcoesDAO.findAcaoById(2);
+
+                if (tenhoCartucho && tenhoRevolver) {
+                    gameState.setMessage(equiparArma.getDescricao());
+                    gameState.getInventario().removerItem(revolver, 1);
+                    gameState.getInventario().removerItem(cartucho, 1);
+                    gameState.getInventario().adicionarItem(revolverCarregado, 1);
+                } else {
+                    gameState.setMessage(equiparArma.getDescricao_negativa());
+                }
+                break;
+            case "check janela":
+                gameState.carregarCena(7);
+                break;
+            case "correr":
+                gameState.carregarCena(8);
+                break;
+            case "go to exit":
+                gameState.carregarCena(9);
+                gameState.setLocation("casaFundo");
         }
     }
 
     private void fundoCasa(String input) throws SQLException {
         switch (input) {
-            case "check gerador":
-                gameState.descricaoNeg(2, gameState);
+            case "lutar":
+                gameState.carregarCena(11);
                 break;
-            case "check cerca":
-                gameState.descricaoNeg(3, gameState);
+            case "fugir":
+                gameState.carregarCena(10);
                 break;
             default:
                 gameState.setMessage("Comando errado");
-        }
-        if (input.equalsIgnoreCase("voltar")) {
-            gameState.carregarCena(1, gameState);
-            gameState.setLocation("casa");
         }
     }
 }

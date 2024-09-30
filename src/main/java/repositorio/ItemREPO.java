@@ -21,7 +21,8 @@ public class ItemREPO {
                 String descricao_item = rs.getString("descricao_item");
                 Integer quantidade = rs.getInt("quantidade");
                 String resNegativo = rs.getString("descricao_negativa");
-                return new Item(id_item, nome, descricao_item, quantidade, resNegativo);
+                String itemPegado = rs.getString("item_pegado");
+                return new Item(id_item, nome, descricao_item, quantidade, resNegativo, itemPegado);
             }else {
                 throw new SQLException("Item nao encontrado");
             }

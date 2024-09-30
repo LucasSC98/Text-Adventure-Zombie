@@ -1,11 +1,6 @@
 package model;
 
-import repositorio.AcoesDAO;
-import repositorio.CenaRepo;
-
-import java.sql.SQLException;
-
-public class Movimentos {
+public class Acoes {
     private Integer id_acao;
     private Integer item1_id;
     private Integer item2_id;
@@ -14,7 +9,7 @@ public class Movimentos {
     private String descricao_negativa;
     private String descricao;
 
-    public Movimentos(Integer id_acao, Integer item1_id, Integer item2_id, String descricaoComb, String nome_acao, String descricao_negativa, String descricao) {
+    public Acoes(Integer id_acao, Integer item1_id, Integer item2_id, String descricaoComb, String nome_acao, String descricao_negativa, String descricao) {
         this.id_acao = id_acao;
         this.item1_id = item1_id;
         this.item2_id = item2_id;

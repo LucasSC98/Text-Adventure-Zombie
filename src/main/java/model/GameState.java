@@ -4,23 +4,45 @@ import repositorio.AcoesDAO;
 import repositorio.CenaRepo;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class GameState {
     private String location;
     private String message;
     private Inventario inventario;
-    private Long cenaId;
+    private Integer cenaId; // ID da cena atual
     private Localizacao localizacao;
     private String help;
-
+    private Integer idSave; // ID do save
+    private Cena cenaAtual; // Cena atual
+    private List<Item> inventory;
+    private boolean visitouLocal;
 
     public GameState() {
         this.location = "start";
         this.message = "";
-        this.inventario = new Inventario();
-        this.cenaId = null;
+        this.inventario = new Inventario(this);
+        this.cenaId = null; // Inicialmente sem cena
         this.localizacao = null;
         this.help = "";
+        this.idSave = 1; // Inicialmente sem ID de save
+        this.cenaAtual = null; // Inicialmente sem cena atual
+    }
+
+    public Integer getIdSave() {
+        return idSave;
+    }
+
+    public boolean isVisitouLocal() {
+        return visitouLocal;
+    }
+
+    public void setVisitouLocal(boolean visitouLocal) {
+        this.visitouLocal = visitouLocal;
+    }
+
+    public void setIdSave(Integer idSave) {
+        this.idSave = idSave;
     }
 
     public String getHelp() {
@@ -51,11 +73,19 @@ public class GameState {
         return inventario;
     }
 
-    public Long getCenaId() {
-        return cenaId;
+    public void setInventory(List<Item> inventory) {
+        this.inventory = inventory;
     }
 
-    public void setCenaId(Long cenaId) {
+    public List<Item> getInventory() {
+        return inventory;
+    }
+
+    public Integer getCenaId() {
+        return cenaId; // Método para obter o ID da cena atual
+    }
+
+    public void setCenaId(Integer cenaId) {
         this.cenaId = cenaId;
     }
 
@@ -67,23 +97,34 @@ public class GameState {
         this.localizacao = localizacao;
     }
 
-    public void carregarCena(int cenaId, GameState gameState) throws SQLException {
+    public Cena getCenaAtual() {
+        return cenaAtual;
+    }
+
+    public void setCenaAtual(Cena cenaAtual) {
+        this.cenaAtual = cenaAtual; // Define a cena atual
+        this.cenaId = cenaAtual.getIdCena(); // Atualiza o ID da cena atual
+    }
+
+    // Método para carregar a cena e ajuda no banco de dados
+    public void carregarCena(int cenaId) throws SQLException {
         Cena cena = CenaRepo.findCenaById(cenaId);
         if (cena != null) {
-            gameState.setMessage(cena.getDescricao());
-            gameState.setHelp(cena.getHelp_cena());
+            this.setMessage(cena.getDescricao());
+            this.setHelp(cena.getHelp_cena());
+            this.setCenaAtual(cena); // Atualiza a cena atual
         } else {
-            gameState.setMessage("Cena não encontrada.");
-            gameState.setHelp("");
+            this.setMessage("Cena não encontrada.");
+            this.setHelp("");
         }
     }
 
-    public void descricaoNeg(int Id, GameState gameState) throws SQLException {
-        Movimentos movimento = AcoesDAO.findAcaoById(Id);
+    public void descricaoNeg(int Id) throws SQLException {
+        Acoes movimento = AcoesDAO.findAcaoById(Id);
         if (movimento != null) {
-            gameState.setMessage(movimento.getDescricao());
+            this.setMessage(movimento.getDescricao());
         } else {
-            gameState.setMessage("Ação não encontrada.");
+            this.setMessage("Ação não encontrada.");
         }
     }
 }

@@ -1,11 +1,11 @@
 package repositorio;
 
-import model.Movimentos;
+import model.Acoes;
 
 import java.sql.*;
 
 public class AcoesDAO {
-    public static Movimentos findAcaoById(int id) throws SQLException {
+    public static Acoes findAcaoById(int id) throws SQLException {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -20,11 +20,11 @@ public class AcoesDAO {
                 Integer id_acao = rs.getInt("id_acao");
                 Integer item1_id = rs.getInt("item1_id");
                 Integer item2_id = rs.getInt("item2_id");
-                String combinacao = rs.getString("descricao_combinacao");
+                String combinacao = rs.getString("descricaoComb");
                 String nome = rs.getString("nome_acao");
-                String descricaoNeg = rs.getString("descricao_neg");
+                String descricaoNeg = rs.getString("descricao_negativa");
                 String descricao = rs.getString("descricao");
-                return new Movimentos (id_acao, item1_id, item2_id, combinacao, nome, descricaoNeg, descricao);
+                return new Acoes(id_acao, item1_id, item2_id, combinacao, nome, descricaoNeg, descricao);
             } else {
                 throw new SQLException("Ação com ID " + id + " não encontrada.");
             }
