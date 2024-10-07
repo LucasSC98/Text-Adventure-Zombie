@@ -1,30 +1,54 @@
+create database textadventure
+
+select * from cenas
 CREATE TABLE cenas (
-    id_cena int not null primary key,
-    nome varchar(50) not null,
-    id_local INT,
-    descricao_historia TEXT,
-    help varchar (!00)
+    id_cena INT PRIMARY KEY NOT NULL,
+    nome VARCHAR(100) NOT NULL,
+    id_local INT NOT NULL,
+    descricao_historia TEXT NOT NULL,
+    help VARCHAR(100)
 );
 
+INSERT INTO textadventure.cenas (id_cena,nome,id_local,descricao_historia,help) VALUES
+	 (1,'Início',1,'Você está na sala de uma casa. À esquerda, há uma escada que leva ao porão, e à direita, a porta do jardim da frente. A atmosfera está carregada de tensão, e você sente que precisa decidir rapidamente. Deveria descer para o porão, onde pode haver algo útil ou perigoso, ou ir para o jardim?','go to porao, go to jardim'),
+	 (2,'Porão',1,'Você vai para o fundo da casa, onde há um porão, está um pouco escuro e você encontra uma lanterna em cima do balcão, do lado tem algumas pilhas também, seria bom eu pegar os dois, para usar um com o outro.','get lanterna, get pilhas'),
+	 (3,'Porão2',1,'Enquanto vasculho o porao, encontro um cartucho. Pode ser inútil agora, mas se eu achar uma arma, vai valer a pena. Sem hesitar, coloco-o no bolso, sabendo que pode fazer a diferença mais tarde.','get cartucho'),
+	 (4,'Jardim',2,'Você sai para o quintal. Há um contêiner que pode ter algo util, acho melhor verificar isso, talvez encontre algo que consigar usar dentro de casa','check container'),
+	 (5,'Casa',1,'Volto para dentro de casa. Tudo parece quieto demais, mas há algo novo no ar. Ao me mover pelo corredor, noto uma porta que nunca vi antes, vou tentar usar essa chave que achei no jardim na porta','use key'),
+	 (6,'Quarto Fechado',3,'Consegui usar a chave na porta. Abro a porta devagar. Vejo algo que algo brilha no canto. Me aproximo, e ali, um pouco sujo, está um revólver. Meu coração acelera — finalmente, uma arma. Pego-o com cuidado, sentindo o peso frio do metal nas mãos. Verifico o tambor: vazio. O cartucho que encontrei antes vai ser útil afinal.','get revolver'),
+	 (7,'Janela',3,'Curioso, me aproximo da janela e vejo algo se movendo do lado de fora. Para a minha surpresa, é uma horda de zumbis, todos se aglomerando e batendo contra o vidro. Que ótimo! Agora tenho uma arma, mas também uma visita nada agradável. Preciso pensar rápido no que fazer.','correr,'),
+	 (8,'Casa',1,'Sem perder tempo, sinto o pânico tomando conta. A horda está se aproximando, e a última coisa que quero é ser cercado, tento achar a saída da casa e correr da horda','go to exit'),
+	 (9,'Exit',5,'Abro a porta da saída e me deparo com uma horda de zumbis a poucos metros de mim, o pânico quase me paralisa. Com o revólver na mão, me pergunto: devo usar a arma contra eles e lutar ou tentar fugir antes que me cercem?','lutar, fugir'),
+	 (10,'Final Fugir',5,'Com a horda se aproximando rapidamente, a adrenalina me diz que não vale a pena arriscar. Sem pensar duas vezes, viro-me e corro em direção ao fundo do quintal. O som dos zumbis crescendo atrás de mim é ensurdecedor, mas mantenho o foco em um ponto à frente. Conseguindo atravessar a cerca, sinto a liberdade do ar fresco em meu rosto enquanto me afasto. Olhando para trás, vejo os zumbis pararem na cerca, mas eles não conseguem me alcançar. Com um suspiro de alívio, sigo em frente, determinado a encontrar um lugar seguro e deixar esse pesadelo para trás','null');
+INSERT INTO textadventure.cenas (id_cena,nome,id_local,descricao_historia,help) VALUES
+	 (11,'Final Lutar',5,'Com o revólver na mão, decido que não vou recuar. Aponto a arma para a horda e puxo o gatilho, e um dos zumbis cai, mas não é o suficiente para deter os outros. Eles avançam em minha direção, e com cada tiro que dou, percebo que estou cercado. A luta é feroz, mas a quantidade de zumbis é esmagadora. Sinto as garras se fechando sobre mim e, em um último esforço, disparo uma última vez antes de sucumbir. O mundo ao meu redor se torna escuro, e percebo que, apesar de minha bravura, não consegui escapar deste pesadelo.','null');
 
+
+
+	
+select * from itens
 CREATE TABLE itens (
-    id_item int not null PRIMARY KEY,
-    nome varchar(100) NOT NULL,
-    descricao varchar (150),
-    quantidade int not null
+    id_item INT PRIMARY KEY NOT NULL,
+    nome_item VARCHAR(100) NOT NULL,
+    descricao_item VARCHAR(260),
+    quantidade INT,
+    descricao_negativa VARCHAR(260),
+    item_pegado VARCHAR(100)
 );
+INSERT INTO textadventure.itens (id_item,nome_item,descricao_item,quantidade,descricao_negativa,item_pegado) 
+values	(1,'Chave','Uma chave dourada, talvez possa ser usada para abrir algum lugar, talvez encontre um uso para ela na saida, vou voltar para sala',1,NULL,NULL),
+	 	(2,'Pilhas','Agora tenho que usar as pilhas junto da lanterna',1,NULL,'Já peguei a pilha'),
+	 	(3,'Lanterna Sem Carga','Talvez seja util para mim, preciso usar pilhas nisso antes',1,'','Já peguei a lanterna, não preciso de outra'),
+	 	(4,'Lanterna Carregada','Coloquei as pilhas, está funcionando agora',1,NULL,NULL),
+	 	(5,'Cartucho','Pronto, vou deixar isso guardado, talvez possa ser util se eu encontrar uma arma, acho que posso voltar para sala principal',1,NULL,NULL),
+	 	(6,'Revolver','Uma arma de fogo, faz muito barulho, porem posso usar para me defender, devo usar o cartucho antes para carregar, escuto uns barulho fora de casa e olho para janela checar o que é, tenho que verificar isso e carregar o revolver',1,NULL,NULL),
+	 	(7,'Revolver carregado','Arma carregada',1,NULL,NULL);
+		
+		
+		 
 
-CREATE TABLE cena_itens (
-    cena_id int,
-    item_id int,
-    posicao  varchar(100),
-    PRIMARY KEY (cena_id, item_id),
-    FOREIGN KEY (cena_id) REFERENCES cenas(id_cena),
-    FOREIGN KEY (item_id) REFERENCES itens(id_item)
-);
 
-
-
+select * from acoes 
 CREATE TABLE acoes (
     id_acao INT primary key not null,
     item1_id INT,
@@ -37,17 +61,33 @@ CREATE TABLE acoes (
     FOREIGN KEY (item2_id) REFERENCES itens(id_item)
 );
 
+INSERT INTO textadventure.acoes (id_acao,item1_id,item2_id,descricaoComb,nome_acao,descricao_negativa,descricao) VALUES
+	 (1,3,2,'Perfeito, está funcionando, acho que consigo EXPLORAR melhor agora','Combinação lanterna e pilha','Você precisa de uma pilha e uma lanterna para usar essa combinação.',NULL),
+	 (2,4,5,NULL,'Equipar munição','Preciso ter o cartucho e revolver para isso','Consegui equipar as balas no revolver, posso utilizar isso agora.');
 
+
+ select * from inventario i 
 CREATE TABLE inventario (
-    id int not null primary key,
-    item_nome varchar (50),
-    item_id int,
-    quantidade int,
-    FOREIGN KEY (item_id) REFERENCES itens(id_item)  
+    inventario_id int auto_increment primary key,
+    item_id int not null,
+    nome_item varchar(50),
+    quantidade int not null,
+    id_save int, 
+    FOREIGN KEY (item_id) REFERENCES itens(id_item)
 );
 
-create table saves (
-	id_save int primary key auto_increment,
+
+select * from saves
+create table saves(
+	id_save int not null primary key auto_increment,
 	id_cena_atual int not null,
-	foreign key (id_cena_atual) references cenas(id_cena)
+	FOREIGN KEY (id_cena_atual) REFERENCES cenas(id_cena)
 );
+
+
+
+
+
+
+
+
