@@ -1,0 +1,154 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: black;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#game {
+    width: 1010px;
+    height: 620px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #fff;
+    border-radius: 20px;
+    background-color: #444;
+    position: absolute;
+}
+
+#output {
+    width: 100%;
+    height: 500px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+input {
+    width: 50%;
+    padding: 15px;
+    margin: 15px auto 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 60px;
+    left: 300px;
+    border: 2px solid #fff;
+    border-radius: 15px;
+    background-color: #555;
+    color: #fff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    transition: background-color 0.3s;
+}
+
+input:hover {
+    background-color: #666;
+}
+
+#botao {
+    width: 5%;
+    padding: 15px;
+    margin: 15px auto 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    bottom: 60px;
+    left: 1150px;
+    background-color: #007bff;
+    color: white;
+    border: 2px solid #007bff;
+    border-radius: 15px;
+    cursor: pointer;
+    float: right;
+    outline: none;
+    transition: background-color 0.3s;
+}
+
+#botao:hover {
+    background-color: #0056b3;
+}
+
+#inventory {
+    display: none;
+    position: fixed;
+    top: 138px;
+    right: 10px;
+    width: 220px;
+    height: 50%;
+    background-color: #444;
+    border-left: 1px solid black;
+    padding: 10px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    border-radius: 20px;
+}
+
+#inventoryHeader {
+    color: blue;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#gameMessage {
+    margin-right: 220px;
+    padding: 10px;
+    color: black;
+}
+
+#inventoryItems {
+    color: white;
+}
+
+.footer {
+    padding: 10px;
+    border-top: 1px solid #fff;
+    background-color: #333;
+    display: flex;
+    align-items: center;
+}
+
+#help {
+    display: none;
+    position: fixed;
+    top: 138px;
+    left: 10px;
+    width: 220px;
+    height: 50%;
+    background-color: #444;
+    border-left: 1px solid black;
+    padding: 10px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    border-radius: 20px;
+}
+
+#helpHeader {
+    top: 100px;
+    left: 35px;
+    color: #007bff;
+}
+
+#local {
+    color: aqua;
+}
+
+#helpTexto {
+    color: #007bff;
+    position: fixed;
+    font-size: smaller;
+}
+
+#command-input {
+    color: white;
+    font-weight: bolder;
+}

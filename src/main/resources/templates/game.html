@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Adventure</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div id="game">
+    <div id="chat-box">
+        <div id="output"></div>
+    </div>
+    <div id="help">
+        <div id = "local"></div>
+        <div id= "textohelp" >Help</div>
+        <div id="helpTexto"></div>
+    </div>
+    <div id="inventory">
+        <div id="inventoryHeader">Itens no seu inventário:</div>
+        <div id="inventoryItems">
+            <ul id="inventario-lista">
+            </ul>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <form id="game-form" method="post">
+        <input type="text" name="input" id="command-input" placeholder="O que você quer fazer?">
+        <button type="submit" id="botao">Enviar</button>
+    </form>
+</footer>
+
+<script src="/app.js"></script>
+</body>
+</html>
